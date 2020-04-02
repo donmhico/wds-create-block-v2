@@ -26,3 +26,61 @@ describe( 'DownloadInterface', function() {
 
     } );
 } );
+
+describe( 'Download', function() {
+    it( 'should throw an error if passed argument is not instance of DownloadInterface', function() {
+        ( function() {
+            new Download( 'WDS' )
+        }.should.throw() );
+    } );
+
+    it( 'resolved promise should call successFun', function( done ) {
+        ( async function() {
+            let sampleVar = 1;
+
+            const args = {
+                download: ( resolve, reject ) => {
+                    resolve( 2 );
+                },
+                repo: 'WDS/Create-Block',
+                successFunc: ( data ) => {
+                    sampleVar = data;
+                },
+                errorFunc: 'micmico'
+            };
+
+            const downloadInterface = new DownloadInterface( args );
+            const download = new Download( downloadInterface );
+
+            await download.download();
+            sampleVar.should.eql( 2 );
+            done();
+        } )();
+    } );
+
+    it( 'rejected promise should call errorFunc', function( done ) {
+        ( async function() {
+            let sampleVar = 10;
+
+            const args = {
+                download: ( resolve, reject ) => {
+                    reject( 33 );
+                },
+                repo: 'WDS/Create-Block',
+                errorFunc: ( err ) => {
+                    sampleVar = err;
+                },
+                successFunc: () => {
+                    sampleVar = 20;
+                },
+            };
+
+            const downloadInterface = new DownloadInterface( args );
+            const download = new Download( downloadInterface );
+
+            await download.download();
+            sampleVar.should.eql( 33 );
+            done();
+        } )();
+    } );
+} );
