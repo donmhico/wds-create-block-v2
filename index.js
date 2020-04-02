@@ -27,7 +27,6 @@ program
         // Download the repo using the blockName.
         try {
             const downloadInterfaceArg = {
-                repo: WDSBlockStarterRepo,
                 successFunc: ( blockName ) => renameMainPluginFile( blockName ),
                 errorFunc: ( err ) => console.log( err ),
                 download: ( resolve, reject ) => {

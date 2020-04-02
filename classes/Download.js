@@ -13,13 +13,6 @@ class DownloadInterface {
     download;
 
     /**
-     * Repository to download
-     *
-     * @type { string }
-     */
-    repo;
-
-    /**
      * Invoked when the download succeeds
      *
      * Accepts a success object param.

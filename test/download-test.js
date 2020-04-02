@@ -14,7 +14,6 @@ describe( 'DownloadInterface', function() {
     it( 'should return the exact same keys and values as the passed args', function() {
         const args = {
             download: 1,
-            repo: 'WDS/Create-Block',
             successFunc: 'sample',
             errorFunc: 'micmico'
         };
@@ -42,7 +41,6 @@ describe( 'Download', function() {
                 download: ( resolve, reject ) => {
                     resolve( 2 );
                 },
-                repo: 'WDS/Create-Block',
                 successFunc: ( data ) => {
                     sampleVar = data;
                 },
@@ -66,7 +64,6 @@ describe( 'Download', function() {
                 download: ( resolve, reject ) => {
                     reject( 33 );
                 },
-                repo: 'WDS/Create-Block',
                 errorFunc: ( err ) => {
                     sampleVar = err;
                 },
