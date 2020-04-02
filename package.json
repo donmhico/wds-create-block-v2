@@ -1,0 +1,17 @@
+{
+  "name": "v2-wds-create-block",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^5.0.0",
+    "download-git-repo": "^3.0.2",
+    "replace-in-file": "^5.0.2"
+  },
+  "devDependencies": {}
+}
