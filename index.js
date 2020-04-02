@@ -1,7 +1,6 @@
 const { program }     = require( 'commander' );
 const downloadGitRepo = require( 'download-git-repo' );
 const { version }     = require( './package' );
-const fs              = require( 'fs' );
 const {
     DownloadInterface,
     Download
