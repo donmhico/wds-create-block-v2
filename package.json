@@ -13,5 +13,7 @@
     "download-git-repo": "^3.0.2",
     "replace-in-file": "^5.0.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "^7.1.1"
+  }
 }
