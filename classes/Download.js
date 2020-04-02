@@ -5,7 +5,7 @@ class DownloadInterface {
     /**
      * Download function
      *
-     * Accepts (resolve, reject) params. Use `resolve()` when the download success
+     * Accepts (resolve, reject) params. Use `resolve()` if the download succeeds
      * and `reject()` when it fails.
      *
      * @type { function }
@@ -53,6 +53,34 @@ class DownloadInterface {
     }
 }
 
+/**
+ * Download class
+ *
+ * This class is meant to be an abstraction layer and does not contain an actual "download" logic.
+ * You'll provide the download logic as `download` property in the `DownloadInferface` object you passed in instantiation.
+ *
+ * Example:
+ * // Create a DownloadInterface
+ * const downloadInterface = new DownloadInterface( {
+ *     download: ( resolve, reject ) => {
+ *         // Perform download logic.
+ *         if ( downloadLogic() ) {
+ *            // Call `resolve()` when download is a success to invoked passed successFunc().
+ *            resolve();
+ *            return;
+ *         }
+ *
+ *         // Call `reject()` when the download fails to invoke passed errorFunc().
+ *         reject();
+ *     },
+ *     successFunc: () => {
+ *          // Perform actions when download succeeds.
+ *     },
+ *     errorFunc: () => {
+ *          // Perform actions when download fails.
+ *     }
+ * } );
+ */
 class Download {
     /**
      * @type { DownloadInterface }
