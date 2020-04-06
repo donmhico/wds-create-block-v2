@@ -4,6 +4,9 @@ const {
     DownloadInterface,
     Download
 } = require( './Download' );
+const {
+    kebabCase
+} = require( 'lodash' );
 
 class Scaffold {
     /**
@@ -50,6 +53,11 @@ class Scaffold {
             throw( 'Block name should follow the convention <Namespace>/<BlockName>' );
         }
 
+        // Should throw an error if `directory` property does not exists in `args`.
+        if ( ! args.hasOwnProperty( 'directory' ) ) {
+            throw( '"directory" property not found in args' );
+        }
+
         if ( ! ( download instanceof Download ) ) {
             throw( 'Second parameter should be a Download object' );
         }
@@ -58,6 +66,7 @@ class Scaffold {
         this.namespace = validNamespacedBlockName[0];
         this.blockName = validNamespacedBlockName[1];
         this.download  = download;
+        this.directory = args.directory;
     }
 
     async downloadRepo() {
@@ -66,6 +75,18 @@ class Scaffold {
 
     renameMainPluginFile() {
         const wdsBlockStarterMainPluginFile = 'wds-block-starter.php';
+        const blockNameKebabCase = kebabCase( this.blockName );
+
+        return new Promise( ( resolve, reject ) => {
+            fs.rename( `${ this.directory }/${ wdsBlockStarterMainPluginFile }`, `${ this.directory }/${ blockNameKebabCase }.php`, ( err ) => {
+                if ( err ) {
+                    reject( err );
+                    return;
+                }
+
+                resolve();
+            });
+        } );
     }
 }
 

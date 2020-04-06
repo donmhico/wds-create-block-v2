@@ -5,18 +5,38 @@ const {
     Download
 } = require( '../classes/Download' );
 const fs = require( 'fs' );
+const fsPromises = require( 'fs' ).promises;
 
 describe( 'Scaffold', function() {
+
+    const wdsBlockStarterDirectory = './sample-block';
+    const wdsBlockStarterMainFile  = `${ wdsBlockStarterDirectory }/wds-block-starter.php`;
+
     const downloadInterface = new DownloadInterface( {
         download: ( resolve, reject ) => {
-            resolve();
-        },
-        successFunc: () => {
             // Simulate download by creating directory.
+            fs.mkdir( wdsBlockStarterDirectory, {}, ( err ) => {
+                    if ( err ) throw err;
+
+                    // Then create a sample wds-block-starter.php file.
+                    fs.writeFile( wdsBlockStarterMainFile, 'Hello Node.js', 'utf8', ( error ) => {
+                        if ( error ) throw error;
+                        resolve();
+                    } );
+                }
+            );
         },
+        successFunc: () => {},
         errorFunc: () => {},
     } );
     const download = new Download( downloadInterface );
+
+    afterEach( async function() {
+        // Check if the generated directory and file exists.
+        await fsPromises.access( `${ wdsBlockStarterDirectory }/sample-block.php`, fs.constants.F_OK );
+        // Remove the generated directory.
+        await fsPromises.rmdir( wdsBlockStarterDirectory, { recursive: true } );
+    } );
 
     it( 'should throw error if passed namespaced block name is not in proper format', function() {
         ( function() {
@@ -39,7 +59,7 @@ describe( 'Scaffold', function() {
     it( 'should extract namespace and blockname from passed namespacedBlockName', function() {
         const scaffold = new Scaffold( {
             namespacedBlockName: 'WebDevStudios/SampleBlock',
-            directory: './'
+            directory: wdsBlockStarterDirectory
         }, download );
 
         scaffold.namespace.should.eql( 'WebDevStudios' );
@@ -50,15 +70,14 @@ describe( 'Scaffold', function() {
         ( async function() {
             const scaffold = new Scaffold( {
                 namespacedBlockName: 'WebDevStudios/SampleBlock',
-                directory: './'
+                directory: wdsBlockStarterDirectory
             }, download );
 
             await scaffold.downloadRepo();
-            scaffold.renameMainPluginFile();
+            await scaffold.renameMainPluginFile();
 
-            fs.access( './sample-block', fs.constants.F_OK, ( err ) => {
-                err.should.not.instanceOf( Error );
-
+            fs.access( `${ wdsBlockStarterDirectory }/sample-block.php`, fs.constants.F_OK, ( err ) => {
+                should.not.exist( err );
                 done();
             } );
 
